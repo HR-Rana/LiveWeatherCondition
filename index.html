@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+</head>
+
+<body id="body">
+
+
+    <main>
+        <div class="search-area">
+            <form action="">
+                <input type="text" placeholder="Search your City Name" class="cityName">
+                <button class="SearchCity"><img src="./Images/search.png" alt="" class="img-fluid"></button>
+            </form>
+
+            <div class="heading">
+              <span class="d-flex"> <img src="./Images/clear.png" alt="" class=" WeatherIcon">
+                <h4 class="airCondition d-flex align-items-center"></h4>
+              </span>
+                <div class="tempareture">
+                    <h1 class="Temp"></h1>
+                    <h3 class="city">Sonagazi</h3>
+                </div>
+            </div>
+            <div class="footer d-flex justify-content-between">
+                <div class="humidity  d-flex justify-content-between">
+                    <img src="./Images/humidity.png" alt="" class="img-fluid">
+                    <span class="d-flex flex-column">
+                        <h4 class="">
+                            <span class="Humidity">50%</span>
+                        </h4>
+                        <p>Humidity</p>
+                    </span>
+                </div>
+                <div class=" d-flex  justify-content-between">
+                    <img src="./Images/wind.png" alt="" class="img-fluid">
+                    <span class="d-flex flex-column">
+                        <h4 class="wind ">
+                            22
+                        </h4>
+                        <p>Wind Speed</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script>
+        const ApiKey = "e03974d4e6e94f13366ec647e65695c6";
+        const ApiURL = 'https://api.openweathermap.org/data/2.5/weather?units=metric&q='
+
+
+        const LiveWeather = (city = "dhaka") => {
+
+            fetch(ApiURL + city + `&appId=${ApiKey}`)
+                .then(res => res.json())
+                .then(data => {
+                    const { main, name, wind } = data;
+                    document.querySelector(".Temp").innerHTML = Math.round(main.temp) + "°C";
+                    document.querySelector(".city").innerHTML = name;
+                    document.querySelector(".Humidity").innerHTML = main.humidity + " %";
+                    document.querySelector(".wind").innerHTML = Math.round(wind.speed) + "Km/h";
+
+                    let WeatherIcon = document.querySelector(".WeatherIcon").src;
+                    document.querySelector(".airCondition").innerHTML = data.weather[0].main;
+
+
+                   if (data.weather[0].main == "Clouds") {
+                         document.querySelector(".WeatherIcon").src = "./images/clouds.png"
+                   }
+                   else if(data.weather[0].main == "Rain"){
+                  document.querySelector(".WeatherIcon").src = "./images/Rain.png"
+                   }
+                   else if(data.weather[0].main == "Drizzle"){
+                  document.querySelector(".WeatherIcon").src = "./images/drizzle.png"
+                   }
+                   else if(data.weather[0].main == "Clear"){
+                  document.querySelector(".WeatherIcon").src = "./images/clear.png"
+                   }
+                   else if(data.weather[0].main == "Haze"){
+                  document.querySelector(".WeatherIcon").src = "./images/clear.png"
+                   }
+                   else if(data.weather[0].main == "Snow"){
+                  document.querySelector(".WeatherIcon").src = "./images/snow.png"
+                   }
+                   else if(data.weather[0].main == "Mist"){
+                  document.querySelector(".WeatherIcon").src = "./images/mist.png"
+                   }
+                 
+
+
+                })
+
+        }
+
+
+        document.querySelector(".SearchCity").addEventListener("click", function (e) {
+            e.preventDefault();
+            const Input = document.querySelector(".cityName").value;
+            LiveWeather(Input)
+
+        })
+
+        LiveWeather();
+
+    </script>
+
+
+</body>
+
+</html>
